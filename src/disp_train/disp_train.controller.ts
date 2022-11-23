@@ -6,10 +6,11 @@ import { InsertData, UpgrateData, FindData } from "./crud/index"
 
 @Controller('disp_train')
 export class DispTrainController {
+    //
     @Get('/horaActual')
     horaActual(@Res() res) {
         return res.status(HttpStatus.OK).json({
-            anio: moment().year(),
+            ano: moment().year(),
             mes: moment().month() + 1,
             dia: moment().date(),
             hora: moment().hour(),
@@ -58,18 +59,16 @@ export class DispTrainController {
         console.log(statusDisp);
         const body = statusDisp
         let proyect = body.proyect
-        let collection = body.clase + "_" + body.tipo
-        console.log(proyect);
-        console.log(collection);
-        if (proyect == "undefind") {
+        if (proyect == "undefined") {
             proyect = "proyectos_sin_asignar"
         }
+        let collection = body.clase + "_" + body.tipo
         const query = { numero_serial: body.numero_serial }
         let result_update = await UpgrateData(body, query, proyect, collection)
         console.log(result_update);
         collection = body.clase + "_firmware"
         let result = await FindData(query, proyect, collection)
-        if (result == "") {
+        if (result.upsertedId == null) {
             if (body.clase == "ALCANCIA") {
                 const alcancia_firmware = {
                     hora_reset: "03:30"
@@ -90,9 +89,53 @@ export class DispTrainController {
                 }
                 await InsertData(gps_firmware, proyect, collection)
                 return res.status(HttpStatus.OK).json(gps_firmware)
+            } else if(body.clase == "BIA"){
+                const bia_firmware ={
+                    reset: "0",
+                    vigencia: "2021-01-31-",
+                    RTC: "2021-01-08 09:20:20",
+                    Mensajeboleto: "SI NO RECIBE SU BOLETO O\r\n NO CORRESPONDE A SU TARIFA\r\nREPORTE AL CEL: 1234567890\r\n CONSERVE ESTE BOLETO,\r\n ES SU SEGURO DE VIAJERO.",
+                    Tarifa_Name_1: "COMPLETO",
+                    Tarifa_Name_2: "ESTUDIANTE",
+                    Tarifa_Name_3: "3RA EDAD",
+                    Tarifa_Name_4: "DISCAPACIDAD",
+                    Tarifa_Value_1: 8.5,
+                    Tarifa_Value_2: 6.0,
+                    Tarifa_Value_3: 4.0,
+                    Tarifa_Value_4: 0.0,
+                    Ruta: "ACCESA",
+                    Unidad: "01",
+                    Ramal: "accesa",
+                    Tel_ventas: "2222222222",
+                    // time_sleep: "accesa",
+                    reset_printer: "0",
+                    time_contador_pantalla: "20",
+                    mdash: 0,
+                    time_send_data: 30,
+                    Mensaje_pantalla: "BIENVENIDOS",
+                    QR: "www.accesa.me",
+                    key_mdash: "123456789ABCDEF",
+                    ssid: "RED ACCESA",
+                    password: "037E32E7",
+                    proyect: "proyectos_sin_asignar",
+                }
+                await InsertData(bia_firmware, proyect, collection)
+                return res.status(HttpStatus.OK).json(bia_firmware)
             }
         }
         return res.status(HttpStatus.OK).json(result)
+    }
+
+    @Patch('/bia')
+    async statusBia(@Body() statusDisp: any, @Res() res) {
+        console.log(statusDisp);
+        const body = statusDisp
+        let proyect = body.proyect
+        let collection = body.clase + "_" + body.tipo
+        console.log(proyect);
+        console.log(collection);
+        
+        return res.status(HttpStatus.OK).json("Hola Javiercito :D")
     }
 }
 

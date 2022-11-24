@@ -21,6 +21,7 @@ export class DispTrainController {
 
     @Post('/registro')
     async registroData(@Body() createDisp: any, @Res() res) {
+        console.log("--------------------- Registro ---------------------");
         console.log(createDisp);
         const body = createDisp
         let proyect = body.proyect
@@ -30,14 +31,15 @@ export class DispTrainController {
         if (proyect == "undefind") {
             proyect = "proyectos_sin_asignar"
         }
-        const result = await InsertData(body, proyect, collection)
-        console.log(result);
+        // const result = await InsertData(body, proyect, collection)
+        // console.log(result);
 
-        return res.status(HttpStatus.OK).json(true)
+        return res.status(200).json(true)
     }
 
     @Patch('/tiempo_real')
     async actulizarData(@Body() updateDisp: any, @Res() res) {
+        console.log("--------------------- Tiempo Real ---------------------");
         console.log(updateDisp);
         const body = updateDisp
         let proyect = body.proyect
@@ -48,14 +50,16 @@ export class DispTrainController {
             proyect = "proyectos_sin_asignar"
         }
         const query = { numero_serial: body.numero_serial }
-        const result = await UpgrateData(body, query, proyect, collection)
-        console.log(result);
+        // const result = await UpgrateData(body, query, proyect, collection)
+        // console.log(result);
 
-        return res.status(HttpStatus.OK).json(true)
+        return res.status(200).json(true)
     }
 
     @Patch('/status')
     async statusDisp(@Body() statusDisp: any, @Res() res) {
+        console.log("--------------------- STATUS ---------------------");
+
         console.log(statusDisp);
         const body = statusDisp
         let proyect = body.proyect
@@ -68,7 +72,7 @@ export class DispTrainController {
         console.log(result_update);
         collection = body.clase + "_firmware"
         let result = await FindData(query, proyect, collection)
-        console.log(result);
+        // console.log(result);
         
         if (result == "") {
             console.log("DATO NO ENCONTRADO");
@@ -107,7 +111,7 @@ export class DispTrainController {
                     proyect: "proyectos_sin_asignar",
                 }
                 await InsertData(contador_firmware, proyect, collection)
-                return res.status(HttpStatus.OK).json(contador_firmware)
+                return res.status(200).json(contador_firmware)
             } else if(body.clase == "GPS"){
                 const gps_firmware ={
                     ruta: "",
@@ -152,7 +156,7 @@ export class DispTrainController {
         }
         result[0].RTC = moment().format('YYYY-MM-DD HH:mm:ss')
         console.log(result[0].RTC);
-        return res.status(201).json(result[0])
+        return res.status(200).json(result[0])
     }
 
     // @Patch('/bia')

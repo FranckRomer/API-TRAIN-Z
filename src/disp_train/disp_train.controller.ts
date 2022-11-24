@@ -68,7 +68,11 @@ export class DispTrainController {
         console.log(result_update);
         collection = body.clase + "_firmware"
         let result = await FindData(query, proyect, collection)
-        if (result.upsertedId == null) {
+        console.log(result);
+        
+        if (result == "") {
+            console.log("DATO NO ENCONTRADO");
+            
             if (body.clase == "ALCANCIA") {
                 const alcancia_firmware = {
                     hora_reset: "03:30"
@@ -77,7 +81,30 @@ export class DispTrainController {
                 return res.status(HttpStatus.OK).json(alcancia_firmware)
             } else if(body.clase == "CONTADOR") {
                 const contador_firmware = {
-                    hora_reset: "03:30"
+                    ruta: "ACCESA",
+                    unidad: "01",
+                    ramal: "accesa",
+                    ssid: "RED ACCESA",
+                    password: "037E32E7",
+                    longitud: "0.0",
+                    latitud: "0.0",
+                    status_server: "0",
+                    status_bd: "0",
+                    tiempo_status: 20,
+                    tiempo_real: 60,
+                    status_reset_values_contador: "0",
+                    delete_sd_contador: "0",
+                    key_contador: "123456789ABCDEFG",
+                    actualizacion_firmware: 0,
+                    hora_1_reinicio_contador: 3,
+                    minuto_1_reinicio_contador: 0,
+                    hora_2_reinicio_contador: 3,
+                    minuto_2_reinicio_contador: 10,
+                    ano_vigencia: 2022,
+                    mes_vigencia: 12,
+                    dia_vigencia: 24,
+                    dispositivo: "DELANTERO",
+                    proyect: "proyectos_sin_asignar",
                 }
                 await InsertData(contador_firmware, proyect, collection)
                 return res.status(HttpStatus.OK).json(contador_firmware)
@@ -92,7 +119,7 @@ export class DispTrainController {
             } else if(body.clase == "BIA"){
                 const bia_firmware ={
                     reset: "0",
-                    vigencia: "2021-01-31-",
+                    vigencia: "2022-12-12-",
                     RTC: "2021-01-08 09:20:20",
                     Mensajeboleto: "SI NO RECIBE SU BOLETO O\r\n NO CORRESPONDE A SU TARIFA\r\nREPORTE AL CEL: 1234567890\r\n CONSERVE ESTE BOLETO,\r\n ES SU SEGURO DE VIAJERO.",
                     Tarifa_Name_1: "COMPLETO",
@@ -120,23 +147,25 @@ export class DispTrainController {
                     proyect: "proyectos_sin_asignar",
                 }
                 await InsertData(bia_firmware, proyect, collection)
-                return res.status(HttpStatus.OK).json(bia_firmware)
+                return res.status(200).json(bia_firmware)
             }
         }
-        return res.status(HttpStatus.OK).json(result)
+        result[0].RTC = moment().format('YYYY-MM-DD HH:mm:ss')
+        console.log(result[0].RTC);
+        return res.status(201).json(result[0])
     }
 
-    @Patch('/bia')
-    async statusBia(@Body() statusDisp: any, @Res() res) {
-        console.log(statusDisp);
-        const body = statusDisp
-        let proyect = body.proyect
-        let collection = body.clase + "_" + body.tipo
-        console.log(proyect);
-        console.log(collection);
+    // @Patch('/bia')
+    // async statusBia(@Body() statusDisp: any, @Res() res) {
+    //     console.log(statusDisp);
+    //     const body = statusDisp
+    //     let proyect = body.proyect
+    //     let collection = body.clase + "_" + body.tipo
+    //     console.log(proyect);
+    //     console.log(collection);
         
-        return res.status(HttpStatus.OK).json("Hola Javiercito :D")
-    }
+    //     return res.status(HttpStatus.OK).json("Hola Javiercito :D")
+    // }
 }
 
 

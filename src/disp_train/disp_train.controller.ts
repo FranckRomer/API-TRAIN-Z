@@ -24,17 +24,17 @@ export class DispTrainController {
         console.log("--------------------- Registro ---------------------");
         console.log(createDisp);
         const body = createDisp
-        let proyect = body.proyect
+        let proyect = "trainz"
         const collection = body.clase + "_" + body.tipo
         console.log(proyect);
         console.log(collection);
-        if (proyect == "undefind") {
-            proyect = "proyectos_sin_asignar"
-        }
-        // const result = await InsertData(body, proyect, collection)
-        // console.log(result);
+        // if (proyect == "undefind") {
+        //     proyect = "proyectos_sin_asignar"
+        // }
+        const result = await InsertData(body, proyect, collection)
+        console.log(result);
 
-        return res.status(200).json(true)
+        return res.status(201).json(true)
     }
 
     @Patch('/tiempo_real')
@@ -42,18 +42,18 @@ export class DispTrainController {
         console.log("--------------------- Tiempo Real ---------------------");
         console.log(updateDisp);
         const body = updateDisp
-        let proyect = body.proyect
+        let proyect = "trainz"
         const collection = body.clase + "_" + body.tipo
         console.log(proyect);
         console.log(collection);
-        if (proyect == "undefind") {
-            proyect = "proyectos_sin_asignar"
-        }
+        // if (proyect == "undefind") {
+        //     proyect = "proyectos_sin_asignar"
+        // }
         const query = { numero_serial: body.numero_serial }
-        // const result = await UpgrateData(body, query, proyect, collection)
-        // console.log(result);
+        const result = await UpgrateData(body, query, proyect, collection)
+        console.log(result);
 
-        return res.status(200).json(true)
+        return res.status(201).json(true)
     }
 
     @Patch('/status')
@@ -62,10 +62,10 @@ export class DispTrainController {
 
         console.log(statusDisp);
         const body = statusDisp
-        let proyect = body.proyect
-        if (proyect == "undefined") {
-            proyect = "proyectos_sin_asignar"
-        }
+        let proyect = "trainz"
+        // if (proyect == "undefined") {
+        //     proyect = "proyectos_sin_asignar"
+        // }
         let collection = body.clase + "_" + body.tipo
         const query = { numero_serial: body.numero_serial }
         let result_update = await UpgrateData(body, query, proyect, collection)
@@ -92,8 +92,7 @@ export class DispTrainController {
                     password: "037E32E7",
                     longitud: "0.0",
                     latitud: "0.0",
-                    status_server: "0",
-                    status_bd: "0",
+                    status_server: "1",
                     tiempo_status: 20,
                     tiempo_real: 60,
                     status_reset_values_contador: "0",

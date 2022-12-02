@@ -1,6 +1,6 @@
 import { Body, Controller, Get, HttpStatus, Post, Res, Patch, Query } from '@nestjs/common';
 const moment = require('moment');
-import { InsertData, UpgrateData, FindData } from "../../crud/index"
+import { InsertData, UpgrateData, FindData } from "../crud/index
 
 @Controller('tables')
 export class TablesController {

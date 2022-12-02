@@ -1,7 +1,7 @@
 import { Body, Controller, Get, HttpStatus, Post, Res, Patch } from '@nestjs/common';
 // import path from 'path';
 const moment = require('moment');
-import { InsertData, UpgrateData, FindData } from "../../crud/index"
+import { InsertData, UpgrateData, FindData } from "../crud/index"
 // const {InsertData, UpgrateData}  import "./crud/index.js"
 
 @Controller('disp_train')

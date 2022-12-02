@@ -1,11 +1,12 @@
 import { Body, Controller, Get, HttpStatus, Post, Res, Patch } from '@nestjs/common';
 // import path from 'path';
 const moment = require('moment');
-import { InsertData, UpgrateData, FindData } from "./crud/index"
+import { InsertData, UpgrateData, FindData } from "../../crud/index"
 // const {InsertData, UpgrateData}  import "./crud/index.js"
 
 @Controller('disp_train')
 export class DispTrainController {
+    
     //
     @Get('/horaActual')
     horaActual(@Res() res) {
@@ -49,7 +50,7 @@ export class DispTrainController {
         // if (proyect == "undefind") {
         //     proyect = "proyectos_sin_asignar"
         // }
-        const query = { numero_serial: body.numero_serial }
+        const query = { numero_serie: body.numero_serie }
         const result = await UpgrateData(body, query, proyect, collection)
         console.log(result);
 
@@ -59,15 +60,17 @@ export class DispTrainController {
     @Patch('/status')
     async statusDisp(@Body() statusDisp: any, @Res() res) {
         console.log("--------------------- STATUS ---------------------");
-
         console.log(statusDisp);
+        
         const body = statusDisp
         let proyect = "trainz"
         // if (proyect == "undefined") {
         //     proyect = "proyectos_sin_asignar"
         // }
         let collection = body.clase + "_" + body.tipo
-        const query = { numero_serial: body.numero_serial }
+        const query = { numero_serie: body.numero_serie }
+        console.log(body.clase + "_" + body.tipo);
+        
         let result_update = await UpgrateData(body, query, proyect, collection)
         console.log(result_update);
         collection = body.clase + "_firmware"
@@ -85,16 +88,16 @@ export class DispTrainController {
                 return res.status(HttpStatus.OK).json(alcancia_firmware)
             } else if(body.clase == "CONTADOR") {
                 const contador_firmware = {
+                    numero_serie: body.numero_serie,
                     ruta: "ACCESA",
                     unidad: "01",
                     ramal: "accesa",
-                    ssid: "RED ACCESA",
-                    password: "037E32E7",
-                    longitud: "0.0",
-                    latitud: "0.0",
+                    ssid: "TRAINZ-ACCESA",
+                    password: "1234567890",
                     status_server: "1",
                     tiempo_status: 20,
                     tiempo_real: 60,
+                    tiempo_bloqueo: 5,
                     status_reset_values_contador: "0",
                     delete_sd_contador: "0",
                     key_contador: "123456789ABCDEFG",
@@ -103,7 +106,7 @@ export class DispTrainController {
                     minuto_1_reinicio_contador: 0,
                     hora_2_reinicio_contador: 3,
                     minuto_2_reinicio_contador: 10,
-                    ano_vigencia: 2022,
+                    ano_vigencia: 2030,
                     mes_vigencia: 12,
                     dia_vigencia: 24,
                     dispositivo: "DELANTERO",
@@ -113,17 +116,28 @@ export class DispTrainController {
                 return res.status(200).json(contador_firmware)
             } else if(body.clase == "GPS"){
                 const gps_firmware ={
-                    ruta: "",
-                    unidad: "",
-                    ramal: ""
+                    numero_serie: body.numero_serie,
+                    ruta: "undefined",
+                    unidad: "undefined",
+                    ramal: "undefined",
+                    frecuencia_tiempo_real: 10,
+                    frecuencia_registro_gps: 20,
+                    frecuencia_status: 20,
+                    zona_horaria: -6,
+                    geocercaLat: 20.011610249112156,
+                    geocercaLong:  -98.80324750258833,
+                    actualizacion_firmware_servidor_esp: 0,
                 }
+                
+                
                 await InsertData(gps_firmware, proyect, collection)
                 return res.status(HttpStatus.OK).json(gps_firmware)
             } else if(body.clase == "BIA"){
                 const bia_firmware ={
+                    numero_serie: body.numero_serie,
                     reset: "0",
-                    vigencia: "2022-12-12-",
-                    RTC: "2021-01-08 09:20:20",
+                    vigencia: "2023-12-12-",
+                    // RTC: "2021-01-08 09:20:20",
                     Mensajeboleto: "SI NO RECIBE SU BOLETO O\r\n NO CORRESPONDE A SU TARIFA\r\nREPORTE AL CEL: 1234567890\r\n CONSERVE ESTE BOLETO,\r\n ES SU SEGURO DE VIAJERO.",
                     Tarifa_Name_1: "COMPLETO",
                     Tarifa_Name_2: "ESTUDIANTE",
@@ -145,9 +159,11 @@ export class DispTrainController {
                     Mensaje_pantalla: "BIENVENIDOS",
                     QR: "www.accesa.me",
                     key_mdash: "123456789ABCDEF",
-                    ssid: "RED ACCESA",
-                    password: "037E32E7",
+                    ssid: "TRAINZ-ACCESA",
+                    password: "1234567890",
                     proyect: "proyectos_sin_asignar",
+                    hora_reset_local: 3,
+                    min_reset_local:10,
                 }
                 await InsertData(bia_firmware, proyect, collection)
                 return res.status(200).json(bia_firmware)

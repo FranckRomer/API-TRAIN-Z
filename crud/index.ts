@@ -2,8 +2,8 @@ var MongoClient = require('mongodb').MongoClient;
 var moment = require('moment');
 
 var url = "mongodb://train:ALAala123,.-@74.208.16.217:28021"
-
-
+// 
+// const db =  MongoClient.connect(url);
 
 ///////////////////////////////////////////////////////////////////////
 
@@ -18,7 +18,7 @@ export async function FindData( query, proyect, collection) {
         const MyCollection = dbo.collection(collection);
         // console.log(query, proyect, collection);
         let result = await MyCollection.find(query).toArray();        
-        db.close();
+        // db.close();
         return result
     }
 }
@@ -32,7 +32,7 @@ export async function InsertData(body, proyect, collection) {
         const dbo = db.db(proyect);
         const MyCollection = dbo.collection(collection);
         let result = await MyCollection.insertOne(body);        
-        db.close();
+        // db.close();
         return result
     }
 }
@@ -53,7 +53,7 @@ export async function UpgrateData(body, query, proyect, collection) {
         } else {
             //   
         }
-        db.close();
+        // db.close();
         return result
     }
 }
@@ -68,7 +68,7 @@ export async function DeleteData(query, proyect , collection) {
         const dbo = db.db( proyect );
         const MyCollection = dbo.collection(collection);
         const result = await MyCollection.deleteOne(query);
-        db.close();
+        // db.close();
         return result
     }
 }

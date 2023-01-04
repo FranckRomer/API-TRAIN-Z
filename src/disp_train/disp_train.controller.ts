@@ -186,14 +186,14 @@ export class DispTrainController {
         }
         result[0].RTC = moment().format('YYYY-MM-DD HH:mm:ss')
         console.log(result[0].RTC);
-        let newReset = result[0]
-        if (body.clase == "BIA") {
-            newReset.reset =  "0";            
-        } else {    
-            newReset.status_reset_values_contador = "0";
-        }
-        let result_update_reset = await UpgrateData(newReset, query, proyect, collection)
-        console.log(result_update_reset);
+        // let newReset = result[0]
+        // if (body.clase == "BIA") {
+        //     newReset.reset =  "0";            
+        // } else {    
+        //     newReset.status_reset_values_contador = "0";
+        // }
+        // let result_update_reset = await UpgrateData(newReset, query, proyect, collection)
+        // console.log(result_update_reset);
         
         return res.status(200).json(result[0])
     }

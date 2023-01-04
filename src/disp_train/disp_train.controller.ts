@@ -164,13 +164,37 @@ export class DispTrainController {
                     proyect: "proyectos_sin_asignar",
                     hora_reset_local: 3,
                     min_reset_local:10,
-                }
+                } 
                 await InsertData(bia_firmware, proyect, collection)
                 return res.status(200).json(bia_firmware)
+            }else if(body.clase == "ADDS"){
+                const adds_firmware ={
+                    numero_serie: body.numero_serie,
+                    reset: "0",
+                    vigencia: "2023-12-12",                   
+                    Ruta: "ACCESA",
+                    Unidad: "01",
+                    Ramal: "accesa",
+                    proyect: "proyectos_sin_asignar",
+                    tiempoEntreAnuncios: 5,  //minutos
+                    // direccionRuta: "inicio" , // inicio y  regreso
+
+                } 
+                await InsertData(adds_firmware, proyect, collection)
+                return res.status(200).json(adds_firmware)
             }
         }
         result[0].RTC = moment().format('YYYY-MM-DD HH:mm:ss')
         console.log(result[0].RTC);
+        let newReset = result[0]
+        if (body.clase == "BIA") {
+            newReset.reset =  "0";            
+        } else {    
+            newReset.status_reset_values_contador = "0";
+        }
+        let result_update_reset = await UpgrateData(newReset, query, proyect, collection)
+        console.log(result_update_reset);
+        
         return res.status(200).json(result[0])
     }
 
